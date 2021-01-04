@@ -6,6 +6,7 @@ import os
 from watchdog.events import FileSystemEventHandler
 import time
 from watchdog.observers import Observer
+import directory_function as dr
 
 # for git
 
@@ -18,8 +19,9 @@ class Pc_Cleaner(FileSystemEventHandler):
                 extension = os.path.splitext(new_name)
                 if extension[1] not in extension_path:
                     extension_noname = 'noname'
-                    if not os.path.exists(folder_destination + '/' + extension_noname + dir_sort):
-                        os.makedirs(folder_destination + '/' + extension_noname + dir_sort)
+                    dr.dir_gen(folder_destination, extension_path[extension_noname], dir_sort)  # removing below code for function
+                   # if not os.path.exists(folder_destination + '/' + extension_noname + dir_sort):
+                    #    os.makedirs(folder_destination + '/' + extension_noname + dir_sort)
 
                     file_exists = os.path.isfile(folder_destination + '/' + extension_noname + dir_sort + new_name)
                     while file_exists:
@@ -28,13 +30,15 @@ class Pc_Cleaner(FileSystemEventHandler):
                         file_exists = os.path.isfile(folder_destination + extension_noname + dir_sort + new_name)
 
                     src = folder_to_track + '/' + filename
-                    new_name = folder_destination + '/' + extension_path['noname'] + dir_sort + new_name
+                    #new_name = folder_destination + '/' + extension_path['noname'] + dir_sort + new_name
+                    new_name = folder_destination + '/' + extension_path[extension_noname] + dir_sort + new_name
                     os.rename(src, new_name)
                     break
 
                 else:
-                    if not os.path.exists(folder_destination + '/' + extension_path[extension[1]] + dir_sort):
-                        os.makedirs(folder_destination + '/' + extension_path[extension[1]] + dir_sort)
+                    dr.dir_gen(folder_destination, extension_path[extension[1]], dir_sort)
+                    # if not os.path.exists(folder_destination + '/' + extension_path[extension[1]] + dir_sort):
+                        # os.makedirs(folder_destination + '/' + extension_path[extension[1]] + dir_sort)
 
                     file_exists = os.path.isfile(folder_destination + '/' + extension_path[extension[1]] + dir_sort + new_name)
                     print(file_exists)
@@ -97,7 +101,8 @@ extension_path = {
     '.bmp': 'Images/',
     '.gif': 'Images/',
     '.JPG': 'Images/',
-    '.jpeg': 'Images/',
+    '.jpg': 'Images/',
+    '.jpeg': 'Images/', # added for case sensitive
     '.png': 'Images/',
     '.ps': 'Images/',
     '.psd': 'Images/',
